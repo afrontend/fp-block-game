@@ -1,6 +1,25 @@
 {
   "name": "fp-block-game",
-  "version": "0.1.0",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "version": "0.0.1",
+  "description": "자바스크립트로 만든 block 게임",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afrontend/fp-block-game.git"
+  },
+  "homepage": "https://afrontend.github.io/game/fp-block-game",
+  "keywords": [
+    "javascript",
+    "block",
+    "game"
+  ],
+  "author": "<frontend.wordpress@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/afrontend/fp-block-game/issues"
+  },
   "private": true,
   "dependencies": {
     "react": "^16.8.5",
