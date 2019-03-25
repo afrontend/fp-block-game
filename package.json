@@ -3,7 +3,7 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "자바스크립트로 만든 block 게임",
   "repository": {
     "type": "git",
