@@ -2,12 +2,7 @@ import * as keyboard from 'keyboard-handler';
 import React, { Component } from 'react';
 import _ from 'lodash';
 import './App.css';
-import {
-  initBlockTable,
-  moveBlockTable,
-  keyBlockTable,
-  joinBlockTable
-} from 'fp-block';
+import fpBlock from 'fp-block';
 
 const createBlocks = ary => (
   ary.map(
@@ -38,15 +33,15 @@ const getKeySymbol = (keyValue) => {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = initBlockTable(40, 30);
+    this.state = fpBlock.init(40, 30);
     this.state.timer = setInterval(() => {
-      this.setState((state) => (moveBlockTable(state)));
+      this.setState((state) => (fpBlock.tick(state)));
     }, 150);
 
     this.launchMissile = _.throttle((e) => {
       this.setState((state) => {
         const symbol = getKeySymbol(e.which);
-        return symbol ? keyBlockTable(symbol, state) : state;
+        return symbol ? fpBlock.key(symbol, state) : state;
       });
     }, 500);
 
@@ -57,7 +52,7 @@ class App extends Component {
         setTimeout(() => {
           this.setState((state) => {
             const symbol = getKeySymbol(e.which);
-            return symbol ? keyBlockTable(symbol, state) : state;
+            return symbol ? fpBlock.key(symbol, state) : state;
           });
         });
       }
@@ -68,7 +63,7 @@ class App extends Component {
     return (
       <div className="container">
         <div className="App">
-          <Blocks window={_.flatten(joinBlockTable(this.state))} />
+          <Blocks window={_.flatten(fpBlock.join(this.state))} />
         </div>
       </div>
     );
