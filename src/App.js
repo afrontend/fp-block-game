@@ -9,6 +9,8 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const DOWN = 40;
+const KEY_L = 76;
+const KEY_S = 83;
 
 const createBlocks = ary => (
   ary.map(
@@ -52,8 +54,12 @@ class App extends Component {
     }, 500);
 
     keyboard.keyPressed(e => {
-      if (e.which === 38) {
+      if (e.which === UP) {
         this.launchMissile(e);
+      } else if (e.which === KEY_L) {
+        this.setState((state) => (state.savedState));
+      } else if (e.which === KEY_S) {
+        this.setState((state) => ({savedState: _.cloneDeep(state)}));
       } else {
         setTimeout(() => {
           this.setState((state) => {
