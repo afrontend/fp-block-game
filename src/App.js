@@ -4,6 +4,12 @@ import _ from 'lodash';
 import './App.css';
 import fpBlock from 'fp-block';
 
+const SPACE = 32;
+const LEFT = 37;
+const UP = 38;
+const RIGHT = 39;
+const DOWN = 40;
+
 const createBlocks = ary => (
   ary.map(
     (item, index) => (
@@ -18,11 +24,11 @@ const Block = props => (<div className="block" style={{backgroundColor: props.co
 const Blocks = props => (createBlocks(props.window));
 
 const keyList = [
-  { keyValue: 32, keySymbol: 'space'},
-  { keyValue: 37, keySymbol: 'left' },
-  { keyValue: 38, keySymbol: 'up' },
-  { keyValue: 39, keySymbol: 'right' },
-  { keyValue: 40, keySymbol: 'down' }
+  { keyValue: SPACE, keySymbol: 'space'},
+  { keyValue: LEFT, keySymbol: 'left' },
+  { keyValue: UP, keySymbol: 'up' },
+  { keyValue: RIGHT, keySymbol: 'right' },
+  { keyValue: DOWN, keySymbol: 'down' }
 ];
 
 const getKeySymbol = (keyValue) => {

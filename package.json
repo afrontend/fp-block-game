@@ -22,10 +22,10 @@
   },
   "private": true,
   "dependencies": {
-    "fp-block": "0.0.6",
+    "fp-block": "0.0.8",
     "keyboard-handler": "^2.0.0",
-    "react": "^16.8.5",
-    "react-dom": "^16.8.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-scripts": "2.1.8"
   },
   "scripts": {
