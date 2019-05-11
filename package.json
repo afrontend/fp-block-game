@@ -22,7 +22,7 @@
   },
   "private": true,
   "dependencies": {
-    "fp-block": "0.0.8",
+    "fp-block": "0.0.10",
     "keyboard-handler": "^2.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
