@@ -22,7 +22,11 @@ const createBlocks = ary => (
   )
 );
 
-const Block = props => (<div className="block" style={{backgroundColor: props.color}}>{props.children}</div>);
+const blockClassName = props => {
+  return 'block ' + (props.color === 'yellow' ? 'missile' : '');
+}
+
+const Block = props => (<div className={blockClassName(props)} style={{backgroundColor: props.color}}>{props.children}</div>);
 const Blocks = props => (createBlocks(props.window));
 
 const keyList = [

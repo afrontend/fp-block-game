@@ -8,7 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: auto;
-  width: calc(2vh * 30 + 2px);
+  width: calc(1vh * 30 + 2px);
 }
 
 .App .block {
@@ -17,10 +17,14 @@
   box-sizing: border-box;
   font-size: 3vh;
   font-weight: bold;
-  height: calc(2vh + 2px);
-  line-height: calc(2vh + 2px);
+  height: calc(1vh + 2px);
+  line-height: calc(1vh + 2px);
   text-align: center;
-  width: 2vh;
+  width: 1vh;
+}
+
+.missile {
+  animation: logo-spin infinite 1s linear;
 }
 
 .logo {
