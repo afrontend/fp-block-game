@@ -11,9 +11,8 @@
   },
   "homepage": "https://afrontend.github.io/game/fp-block-game",
   "keywords": [
-    "javascript",
-    "block",
-    "game"
+    "game",
+    "javascript"
   ],
   "author": "<frontend.wordpress@gmail.com>",
   "license": "MIT",
