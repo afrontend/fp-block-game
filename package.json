@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/afrontend/fp-block-game.git"
   },
-  "homepage": "https://afrontend.github.io/game/fp-block-game",
+  "homepage": "/fp-block-game",
   "keywords": [
     "game",
     "javascript"
@@ -31,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,5 +43,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "gh-pages": "^2.2.0"
+  }
 }
