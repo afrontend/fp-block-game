@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/game/fp-block-game/static/css/main.37d35bc4.chunk.css",
+    "main.js": "/game/fp-block-game/static/js/main.8243ace2.chunk.js",
+    "main.js.map": "/game/fp-block-game/static/js/main.8243ace2.chunk.js.map",
+    "runtime-main.js": "/game/fp-block-game/static/js/runtime-main.5b4d54dd.js",
+    "runtime-main.js.map": "/game/fp-block-game/static/js/runtime-main.5b4d54dd.js.map",
+    "static/js/2.7e82f0be.chunk.js": "/game/fp-block-game/static/js/2.7e82f0be.chunk.js",
+    "static/js/2.7e82f0be.chunk.js.map": "/game/fp-block-game/static/js/2.7e82f0be.chunk.js.map",
+    "index.html": "/game/fp-block-game/index.html",
+    "precache-manifest.33c88cdfd52fce6db8af9019639479d5.js": "/game/fp-block-game/precache-manifest.33c88cdfd52fce6db8af9019639479d5.js",
+    "service-worker.js": "/game/fp-block-game/service-worker.js",
+    "static/css/main.37d35bc4.chunk.css.map": "/game/fp-block-game/static/css/main.37d35bc4.chunk.css.map",
+    "static/js/2.7e82f0be.chunk.js.LICENSE": "/game/fp-block-game/static/js/2.7e82f0be.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5b4d54dd.js",
+    "static/js/2.7e82f0be.chunk.js",
+    "static/css/main.37d35bc4.chunk.css",
+    "static/js/main.8243ace2.chunk.js"
+  ]
+}
