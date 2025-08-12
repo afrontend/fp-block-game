@@ -18,7 +18,7 @@
   },
   "private": true,
   "dependencies": {
-    "fp-block": "0.0.10",
+    "fp-block": "0.0.12",
     "keyboard-handler": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
