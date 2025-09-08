@@ -75,7 +75,7 @@ const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
     fpBlock.init(40, 30),
   );
-  const timerRef = useRef<NodeJS.Timeout>();
+  const timerRef = useRef<NodeJS.Timeout>(null);
 
   const launchMissile = useCallback(
     _.throttle((e: { which: number }) => {
