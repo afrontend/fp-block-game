@@ -18,11 +18,18 @@
   height: calc(1vh + 2px);
   line-height: calc(1vh + 2px);
   text-align: center;
+  touch-action: manipulation;
   width: 1vh;
 }
 
 .missile {
   animation: logo-spin infinite 1s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .missile {
+    animation: none;
+  }
 }
 
 .logo {

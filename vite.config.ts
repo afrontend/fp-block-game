@@ -6,5 +6,10 @@ export default defineConfig({
   base: '/fp-block-game/',
   build: {
     outDir: 'build'
-  }
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/setupTests.ts',
+  },
 })
