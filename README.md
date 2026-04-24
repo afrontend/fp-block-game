@@ -6,7 +6,7 @@
 [블로그](https://agvim.wordpress.com/2019/03/25/block-game-with-javascript/)에서 간단한 설명을 볼 수 있으며 아래 라이브러리를 사용했다.
 
 * [fp-block](https://www.npmjs.com/package/fp-block)
-* [create react app](https://github.com/facebook/create-react-app)
+* [vite](https://vite.dev/)
 * [keyboard-handler](https://github.com/emiljohansson/keyboard-handler)
 * [lodash](https://lodash.com/)
 * [react](https://react.dev/)
@@ -20,6 +20,22 @@
 # Run
 
     npm start
+
+# Test
+
+    npm test
+
+# Build
+
+    npm run build
+
+# Preview
+
+    npm run preview
+
+# Deploy
+
+    npm run deploy
 
 # Web
 
