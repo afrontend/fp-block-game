@@ -19,13 +19,11 @@
   },
   "private": true,
   "dependencies": {
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "fp-block": "^0.0.14",
     "keyboard-handler": "^3.0.7",
+    "lodash": "^4.18.1",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "web-vitals": "^5.2.0"
+    "react-dom": "^19.2.6"
   },
   "scripts": {
     "dev": "vite",
@@ -57,7 +55,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
-    "@types/jest": "^30.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
