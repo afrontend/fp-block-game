@@ -1,8 +1,18 @@
 import * as keyboard from "keyboard-handler";
 import React, { useState, useEffect, useRef } from "react";
-import { cloneDeep, throttle } from "lodash";
 import "./App.css";
 import fpBlock, { type Block, type GameState } from "fp-block";
+
+function throttle<T extends unknown[]>(fn: (...args: T) => void, ms: number) {
+  let last = 0;
+  return (...args: T) => {
+    const now = Date.now();
+    if (now - last >= ms) {
+      last = now;
+      fn(...args);
+    }
+  };
+}
 
 interface BlockProps {
   color: string;
@@ -108,7 +118,7 @@ const App: React.FC = () => {
       } else if (e.which === KEY_CODES.SAVE) {
         setGameState((state) => ({
           ...state,
-          savedState: cloneDeep(state),
+          savedState: structuredClone(state),
         }));
       } else {
         // setTimeout으로 다음 이벤트 루프에서 처리해
