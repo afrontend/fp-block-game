@@ -19,13 +19,13 @@
   },
   "private": true,
   "dependencies": {
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "fp-block": "^0.0.8",
-    "keyboard-handler": "^2.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "web-vitals": "^2.1.4"
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "fp-block": "^0.0.14",
+    "keyboard-handler": "^3.0.7",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "web-vitals": "^5.2.0"
   },
   "scripts": {
     "dev": "vite",
@@ -59,15 +59,15 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.3.0",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.5",
     "gh-pages": "^6.3.0",
     "jsdom": "^29.0.2",
-    "typescript": "^5.9.2",
-    "vite": "^6.3.5",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14",
     "vitest": "^4.1.5"
   }
 }
