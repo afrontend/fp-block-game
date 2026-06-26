@@ -1,5 +1,3 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-
 vi.mock('fp-block', () => ({
   default: {
     init: vi.fn(() => ({})),
@@ -10,9 +8,9 @@ vi.mock('fp-block', () => ({
 }));
 vi.mock('keyboard-handler', () => ({ keyPressed: vi.fn() }));
 
-// ─── index.tsx — root element null 체크 ─────────────────────────────────────
+// ─── index.jsx — root element null 체크 ──────────────────────────────────────
 
-describe('index.tsx — root element null 체크', () => {
+describe('index.jsx — root element null 체크', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.resetModules();

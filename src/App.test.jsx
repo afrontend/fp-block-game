@@ -1,9 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render } from '@testing-library/react';
 import App, { getKeySymbol, applyKeyToState, GAME_CONFIG } from './App';
 
-// fp-block과 keyboard-handler는 외부 라이브러리이므로 mock 처리
 vi.mock('fp-block', () => ({
   default: {
     init: vi.fn(() => ({ blocks: [], score: 0 })),
@@ -96,7 +94,7 @@ describe('BlockComponent — blockClassName', () => {
 
   it('노란색 블록은 "missile" 클래스를 가짐', async () => {
     const fpBlock = (await import('fp-block')).default;
-    vi.mocked(fpBlock.join).mockReturnValue([[{ color: 'yellow', count: 0 }]]);
+    fpBlock.join.mockReturnValue([[{ color: 'yellow', count: 0 }]]);
     render(<App />);
     const block = document.querySelector('.missile');
     expect(block).toBeInTheDocument();
@@ -104,14 +102,14 @@ describe('BlockComponent — blockClassName', () => {
 
   it('노란색이 아닌 블록은 "missile" 클래스를 가지지 않음', async () => {
     const fpBlock = (await import('fp-block')).default;
-    vi.mocked(fpBlock.join).mockReturnValue([[{ color: 'red', count: 1 }]]);
+    fpBlock.join.mockReturnValue([[{ color: 'red', count: 1 }]]);
     render(<App />);
     const block = document.querySelector('.missile');
     expect(block).not.toBeInTheDocument();
   });
 });
 
-// ─── Blocks 컴포넌트 — blocks prop (rename from window) ───────────────────
+// ─── Blocks 컴포넌트 ───────────────────────────────────────────────────────
 
 describe('Blocks 컴포넌트', () => {
   beforeEach(() => {
@@ -120,7 +118,7 @@ describe('Blocks 컴포넌트', () => {
 
   it('join()이 반환한 2D 배열을 flat하여 블록을 렌더링', async () => {
     const fpBlock = (await import('fp-block')).default;
-    vi.mocked(fpBlock.join).mockReturnValue([
+    fpBlock.join.mockReturnValue([
       [{ color: 'red', count: 1 }, { color: 'blue', count: 2 }],
       [{ color: 'green', count: 3 }],
     ]);
@@ -131,7 +129,7 @@ describe('Blocks 컴포넌트', () => {
 
   it('join()이 빈 배열을 반환하면 블록이 없음', async () => {
     const fpBlock = (await import('fp-block')).default;
-    vi.mocked(fpBlock.join).mockReturnValue([]);
+    fpBlock.join.mockReturnValue([]);
     render(<App />);
     const blocks = document.querySelectorAll('.block');
     expect(blocks).toHaveLength(0);

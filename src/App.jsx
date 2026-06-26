@@ -1,31 +1,17 @@
 import * as keyboard from "keyboard-handler";
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
-import fpBlock, { type Block, type GameState } from "fp-block";
+import fpBlock from "fp-block";
 
-function throttle<T extends unknown[]>(fn: (...args: T) => void, ms: number) {
+function throttle(fn, ms) {
   let last = 0;
-  return (...args: T) => {
+  return (...args) => {
     const now = Date.now();
     if (now - last >= ms) {
       last = now;
       fn(...args);
     }
   };
-}
-
-interface BlockProps {
-  color: string;
-  children: React.ReactNode;
-}
-
-interface BlocksProps {
-  blocks: Block[];
-}
-
-interface KeyMapping {
-  keyValue: number;
-  keySymbol: string;
 }
 
 // 키보드 키 코드 상수
@@ -37,31 +23,30 @@ const KEY_CODES = {
   DOWN: 40,
   SAVE: 83,  // S — 현재 상태 저장
   LOAD: 76,  // L — 저장된 상태 불러오기
-} as const;
+};
 
 // 게임 초기화 및 루프 설정값
 export const GAME_CONFIG = {
   GRID_WIDTH: 40,
   GRID_HEIGHT: 30,
-  TICK_INTERVAL_MS: 150,   // 게임 틱 주기 (ms)
+  TICK_INTERVAL_MS: 150,    // 게임 틱 주기 (ms)
   MISSILE_THROTTLE_MS: 500, // 미사일 연사 제한 (ms)
-} as const;
+};
 
 // 노란색 블록이 미사일을 나타냄 (fp-block 라이브러리 규약)
 const MISSILE_COLOR = "yellow";
 
-const createBlocks = (ary: Block[]): React.ReactElement[] =>
+const createBlocks = (ary) =>
   ary.map((item, index) => (
     <BlockComponent color={item.color} key={index}>
       {item.count}
     </BlockComponent>
   ));
 
-const blockClassName = (props: BlockProps): string => {
-  return "block " + (props.color === MISSILE_COLOR ? "missile" : "");
-};
+const blockClassName = (props) =>
+  "block " + (props.color === MISSILE_COLOR ? "missile" : "");
 
-const BlockComponent: React.FC<BlockProps> = (props) => (
+const BlockComponent = (props) => (
   <div
     aria-hidden="true"
     className={blockClassName(props)}
@@ -71,9 +56,9 @@ const BlockComponent: React.FC<BlockProps> = (props) => (
   </div>
 );
 
-const Blocks: React.FC<BlocksProps> = (props) => createBlocks(props.blocks);
+const Blocks = (props) => createBlocks(props.blocks);
 
-const keyList: KeyMapping[] = [
+const keyList = [
   { keyValue: KEY_CODES.SPACE, keySymbol: "space" },
   { keyValue: KEY_CODES.LEFT,  keySymbol: "left" },
   { keyValue: KEY_CODES.UP,    keySymbol: "up" },
@@ -81,26 +66,26 @@ const keyList: KeyMapping[] = [
   { keyValue: KEY_CODES.DOWN,  keySymbol: "down" },
 ];
 
-export const getKeySymbol = (keyValue: number): string | null => {
+export const getKeySymbol = (keyValue) => {
   const found = keyList.find((key) => key.keyValue === keyValue);
   return found ? found.keySymbol : null;
 };
 
 // 키 입력을 게임 상태에 적용. 매핑되지 않은 키는 상태를 그대로 반환.
-export const applyKeyToState = (keyCode: number, state: GameState): GameState => {
+export const applyKeyToState = (keyCode, state) => {
   const symbol = getKeySymbol(keyCode);
   return symbol ? fpBlock.key(symbol, state) : state;
 };
 
-const App: React.FC = () => {
-  const [gameState, setGameState] = useState<GameState>(() =>
+const App = () => {
+  const [gameState, setGameState] = useState(() =>
     fpBlock.init(GAME_CONFIG.GRID_WIDTH, GAME_CONFIG.GRID_HEIGHT),
   );
-  const timerRef = useRef<NodeJS.Timeout>(null);
+  const timerRef = useRef(null);
 
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
-    throttle((e: { which: number }) => {
+    throttle((e) => {
       setGameState((state) => applyKeyToState(e.which, state));
     }, GAME_CONFIG.MISSILE_THROTTLE_MS),
   );
@@ -110,7 +95,7 @@ const App: React.FC = () => {
       setGameState((state) => fpBlock.tick(state));
     }, GAME_CONFIG.TICK_INTERVAL_MS);
 
-    const handleKeyPress = (e: { which: number }) => {
+    const handleKeyPress = (e) => {
       if (e.which === KEY_CODES.UP) {
         launchMissileRef.current(e);
       } else if (e.which === KEY_CODES.LOAD) {
