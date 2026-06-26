@@ -8,7 +8,6 @@
 * [fp-block](https://www.npmjs.com/package/fp-block)
 * [vite](https://vite.dev/)
 * [keyboard-handler](https://github.com/emiljohansson/keyboard-handler)
-* [lodash](https://lodash.com/)
 * [react](https://react.dev/)
 
 # Installation
