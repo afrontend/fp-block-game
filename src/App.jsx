@@ -1,7 +1,7 @@
-import * as keyboard from "keyboard-handler";
-import React, { useState, useEffect, useRef } from "react";
-import "./App.css";
-import fpBlock from "fp-block";
+import * as keyboard from 'keyboard-handler';
+import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
+import fpBlock from 'fp-block';
 
 function throttle(fn, ms) {
   let last = 0;
@@ -34,36 +34,14 @@ export const GAME_CONFIG = {
 };
 
 // 노란색 블록이 미사일을 나타냄 (fp-block 라이브러리 규약)
-const MISSILE_COLOR = "yellow";
-
-const createBlocks = (ary) =>
-  ary.map((item, index) => (
-    <BlockComponent color={item.color} key={index}>
-      {item.count}
-    </BlockComponent>
-  ));
-
-const blockClassName = (props) =>
-  "block " + (props.color === MISSILE_COLOR ? "missile" : "");
-
-const BlockComponent = (props) => (
-  <div
-    aria-hidden="true"
-    className={blockClassName(props)}
-    style={{ backgroundColor: props.color }}
-  >
-    {props.children}
-  </div>
-);
-
-const Blocks = (props) => createBlocks(props.blocks);
+const MISSILE_COLOR = 'yellow';
 
 const keyList = [
-  { keyValue: KEY_CODES.SPACE, keySymbol: "space" },
-  { keyValue: KEY_CODES.LEFT,  keySymbol: "left" },
-  { keyValue: KEY_CODES.UP,    keySymbol: "up" },
-  { keyValue: KEY_CODES.RIGHT, keySymbol: "right" },
-  { keyValue: KEY_CODES.DOWN,  keySymbol: "down" },
+  { keyValue: KEY_CODES.SPACE, keySymbol: 'space' },
+  { keyValue: KEY_CODES.LEFT,  keySymbol: 'left' },
+  { keyValue: KEY_CODES.UP,    keySymbol: 'up' },
+  { keyValue: KEY_CODES.RIGHT, keySymbol: 'right' },
+  { keyValue: KEY_CODES.DOWN,  keySymbol: 'down' },
 ];
 
 export const getKeySymbol = (keyValue) => {
@@ -77,7 +55,24 @@ export const applyKeyToState = (keyCode, state) => {
   return symbol ? fpBlock.key(symbol, state) : state;
 };
 
-const App = () => {
+const Block = ({ color, children }) => (
+  <div
+    aria-hidden="true"
+    className={'block ' + (color === MISSILE_COLOR ? 'missile' : '')}
+    style={{ backgroundColor: color }}
+  >
+    {children}
+  </div>
+);
+
+const Blocks = ({ blocks }) =>
+  blocks.map((item, index) => (
+    <Block color={item.color} key={index}>
+      {item.count}
+    </Block>
+  ));
+
+function App() {
   const [gameState, setGameState] = useState(() =>
     fpBlock.init(GAME_CONFIG.GRID_WIDTH, GAME_CONFIG.GRID_HEIGHT),
   );
@@ -86,30 +81,30 @@ const App = () => {
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
     throttle((e) => {
-      setGameState((state) => applyKeyToState(e.which, state));
+      setGameState((s) => applyKeyToState(e.which, s));
     }, GAME_CONFIG.MISSILE_THROTTLE_MS),
   );
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setGameState((state) => fpBlock.tick(state));
+      setGameState((s) => fpBlock.tick(s));
     }, GAME_CONFIG.TICK_INTERVAL_MS);
 
     const handleKeyPress = (e) => {
       if (e.which === KEY_CODES.UP) {
         launchMissileRef.current(e);
       } else if (e.which === KEY_CODES.LOAD) {
-        setGameState((state) => state.savedState || state);
+        setGameState((s) => s.savedState || s);
       } else if (e.which === KEY_CODES.SAVE) {
-        setGameState((state) => ({
-          ...state,
-          savedState: structuredClone(state),
+        setGameState((s) => ({
+          ...s,
+          savedState: structuredClone(s),
         }));
       } else {
         // setTimeout으로 다음 이벤트 루프에서 처리해
         // 방향키 입력이 setInterval 틱과 겹치지 않도록 함
         setTimeout(() => {
-          setGameState((state) => applyKeyToState(e.which, state));
+          setGameState((s) => applyKeyToState(e.which, s));
         });
       }
     };
@@ -134,6 +129,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;
