@@ -76,7 +76,6 @@ function App() {
   const [gameState, setGameState] = useState(() =>
     fpBlock.init(GAME_CONFIG.GRID_WIDTH, GAME_CONFIG.GRID_HEIGHT),
   );
-  const timerRef = useRef(null);
 
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
@@ -86,11 +85,14 @@ function App() {
   );
 
   useEffect(() => {
-    timerRef.current = setInterval(() => {
+    const timer = setInterval(() => {
       setGameState((s) => fpBlock.tick(s));
     }, GAME_CONFIG.TICK_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, []);
 
-    const handleKeyPress = (e) => {
+  useEffect(() => {
+    keyboard.keyPressed((e) => {
       if (e.which === KEY_CODES.UP) {
         launchMissileRef.current(e);
       } else if (e.which === KEY_CODES.LOAD) {
@@ -107,15 +109,7 @@ function App() {
           setGameState((s) => applyKeyToState(e.which, s));
         });
       }
-    };
-
-    keyboard.keyPressed(handleKeyPress);
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
+    });
   }, []);
 
   return (
