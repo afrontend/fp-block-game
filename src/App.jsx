@@ -92,7 +92,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    keyboard.keyPressed((e) => {
+    const removeKeyListener = keyboard.keyPressed((e) => {
       if (e.which === KEY_CODES.UP) {
         launchMissileRef.current(e);
       } else if (e.which === KEY_CODES.LOAD) {
@@ -110,6 +110,7 @@ function App() {
         });
       }
     });
+    return () => removeKeyListener();
   }, []);
 
   return (

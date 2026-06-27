@@ -12,7 +12,7 @@ vi.mock('fp-block', () => ({
 }));
 
 vi.mock('keyboard-handler', () => ({
-  keyPressed: vi.fn(),
+  keyPressed: vi.fn(() => vi.fn()),
 }));
 
 // ─── getKeySymbol ──────────────────────────────────────────────────────────
