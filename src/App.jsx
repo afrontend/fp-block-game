@@ -49,11 +49,6 @@ export const getKeySymbol = (keyValue) => {
   return found ? found.keySymbol : null;
 };
 
-// 키 입력을 게임 상태에 적용. 매핑되지 않은 키는 상태를 그대로 반환.
-export const applyKeyToState = (keyCode, state) => {
-  const symbol = getKeySymbol(keyCode);
-  return symbol ? fpBlock.key(symbol, state) : state;
-};
 
 const Block = ({ color, children }) => (
   <div
@@ -81,7 +76,8 @@ function App() {
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
     throttle((e) => {
-      setGameState((s) => applyKeyToState(e.which, s));
+      const symbol = getKeySymbol(e.which);
+      setGameState((s) => symbol ? fpBlock.key(symbol, s) : s);
     }, GAME_CONFIG.MISSILE_THROTTLE_MS),
   );
 
@@ -106,8 +102,9 @@ function App() {
       } else {
         // setTimeout으로 다음 이벤트 루프에서 처리해
         // 방향키 입력이 setInterval 틱과 겹치지 않도록 함
+        const symbol = getKeySymbol(e.which);
         setTimeout(() => {
-          setGameState((s) => applyKeyToState(e.which, s));
+          setGameState((s) => symbol ? fpBlock.key(symbol, s) : s);
         });
       }
     });

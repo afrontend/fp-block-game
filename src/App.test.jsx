@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App, { getKeySymbol, applyKeyToState, GAME_CONFIG } from './App';
+import App, { getKeySymbol, GAME_CONFIG } from './App';
 
 vi.mock('fp-block', () => ({
   default: {
@@ -45,29 +45,6 @@ describe('getKeySymbol', () => {
   it('SAVE(83), LOAD(76)는 keyList에 없으므로 null 반환', () => {
     expect(getKeySymbol(83)).toBeNull();
     expect(getKeySymbol(76)).toBeNull();
-  });
-});
-
-// ─── applyKeyToState ───────────────────────────────────────────────────────
-
-describe('applyKeyToState', () => {
-  const baseState = { blocks: [], score: 0 };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('매핑된 키(SPACE=32)는 fpBlock.key를 호출하고 새 상태를 반환', async () => {
-    const fpBlock = (await import('fp-block')).default;
-    applyKeyToState(32, baseState);
-    expect(fpBlock.key).toHaveBeenCalledWith('space', baseState);
-  });
-
-  it('매핑되지 않은 키는 fpBlock.key를 호출하지 않고 기존 상태를 반환', async () => {
-    const fpBlock = (await import('fp-block')).default;
-    const result = applyKeyToState(65, baseState);
-    expect(fpBlock.key).not.toHaveBeenCalled();
-    expect(result).toBe(baseState);
   });
 });
 
