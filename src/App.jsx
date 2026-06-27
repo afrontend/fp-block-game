@@ -34,7 +34,7 @@ export const GAME_CONFIG = {
 const MISSILE_COLOR = 'yellow';
 
 
-const Block = ({ color, children }) => (
+const Block = React.memo(({ color, children }) => (
   <div
     aria-hidden="true"
     className={'block ' + (color === MISSILE_COLOR ? 'missile' : '')}
@@ -42,7 +42,7 @@ const Block = ({ color, children }) => (
   >
     {children}
   </div>
-);
+));
 
 const Blocks = ({ blocks }) =>
   blocks.map((item, index) => (
