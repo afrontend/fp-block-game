@@ -2,6 +2,7 @@ import * as keyboard from 'keyboard-handler';
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import fpBlock from 'fp-block';
+import { getKeySymbol } from './utils/keyMap';
 
 function throttle(fn, ms) {
   let last = 0;
@@ -14,15 +15,11 @@ function throttle(fn, ms) {
   };
 }
 
-// 키보드 키 코드 상수
+// 키보드 키 코드 상수 (getKeySymbol 범위 밖에서 직접 비교하는 키만 정의)
 const KEY_CODES = {
-  SPACE: 32,
-  LEFT: 37,
-  UP: 38,    // 미사일 발사 (쓰로틀 적용)
-  RIGHT: 39,
-  DOWN: 40,
-  SAVE: 83,  // S — 현재 상태 저장
-  LOAD: 76,  // L — 저장된 상태 불러오기
+  UP: 38,   // 미사일 발사 (쓰로틀 적용)
+  SAVE: 83, // S — 현재 상태 저장
+  LOAD: 76, // L — 저장된 상태 불러오기
 };
 
 // 게임 초기화 및 루프 설정값
@@ -35,19 +32,6 @@ export const GAME_CONFIG = {
 
 // 노란색 블록이 미사일을 나타냄 (fp-block 라이브러리 규약)
 const MISSILE_COLOR = 'yellow';
-
-const keyList = [
-  { keyValue: KEY_CODES.SPACE, keySymbol: 'space' },
-  { keyValue: KEY_CODES.LEFT,  keySymbol: 'left' },
-  { keyValue: KEY_CODES.UP,    keySymbol: 'up' },
-  { keyValue: KEY_CODES.RIGHT, keySymbol: 'right' },
-  { keyValue: KEY_CODES.DOWN,  keySymbol: 'down' },
-];
-
-export const getKeySymbol = (keyValue) => {
-  const found = keyList.find((key) => key.keyValue === keyValue);
-  return found ? found.keySymbol : null;
-};
 
 
 const Block = ({ color, children }) => (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App, { getKeySymbol, GAME_CONFIG } from './App';
+import App, { GAME_CONFIG } from './App';
+import { getKeySymbol } from './utils/keyMap';
 
 vi.mock('fp-block', () => ({
   default: {
