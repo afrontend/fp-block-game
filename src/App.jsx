@@ -76,6 +76,7 @@ function App() {
   const [gameState, setGameState] = useState(() =>
     fpBlock.init(GAME_CONFIG.GRID_WIDTH, GAME_CONFIG.GRID_HEIGHT),
   );
+  const savedState = useRef(null);
 
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
@@ -96,12 +97,12 @@ function App() {
       if (e.which === KEY_CODES.UP) {
         launchMissileRef.current(e);
       } else if (e.which === KEY_CODES.LOAD) {
-        setGameState((s) => s.savedState || s);
+        if (savedState.current) setGameState(structuredClone(savedState.current));
       } else if (e.which === KEY_CODES.SAVE) {
-        setGameState((s) => ({
-          ...s,
-          savedState: structuredClone(s),
-        }));
+        setGameState((s) => {
+          savedState.current = structuredClone(s);
+          return s;
+        });
       } else {
         // setTimeout으로 다음 이벤트 루프에서 처리해
         // 방향키 입력이 setInterval 틱과 겹치지 않도록 함
