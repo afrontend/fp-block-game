@@ -33,6 +33,14 @@ export const GAME_CONFIG = {
 // 노란색 블록이 미사일을 나타냄 (fp-block 라이브러리 규약)
 const MISSILE_COLOR = 'yellow';
 
+const HELP_ITEMS = [
+  { key: '← →', action: '좌우 이동' },
+  { key: '↑',   action: '미사일 발사' },
+  { key: 'S',   action: '상태 저장' },
+  { key: 'L',   action: '상태 불러오기' },
+  { key: 'H',   action: '도움말 닫기' },
+];
+
 
 const Block = React.memo(({ color, children }) => (
   <div
@@ -55,7 +63,9 @@ function App() {
   const [gameState, setGameState] = useState(() =>
     fpBlock.init(GAME_CONFIG.GRID_WIDTH, GAME_CONFIG.GRID_HEIGHT),
   );
+  const [showHelp, setShowHelp] = useState(false);
   const savedState = useRef(null);
+  const showHelpRef = useRef(false);
 
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
@@ -67,7 +77,7 @@ function App() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setGameState((s) => fpBlock.tick(s));
+      setGameState((s) => showHelpRef.current ? s : fpBlock.tick(s));
     }, GAME_CONFIG.TICK_INTERVAL_MS);
     return () => clearInterval(timer);
   }, []);
@@ -84,12 +94,17 @@ function App() {
           return s;
         });
       } else {
-        // setTimeout으로 다음 이벤트 루프에서 처리해
-        // 방향키 입력이 setInterval 틱과 겹치지 않도록 함
         const symbol = getKeySymbol(e.which);
-        setTimeout(() => {
-          setGameState((s) => symbol ? fpBlock.key(symbol, s) : s);
-        });
+        if (symbol === 'help') {
+          showHelpRef.current = !showHelpRef.current;
+          setShowHelp(h => !h);
+        } else {
+          // setTimeout으로 다음 이벤트 루프에서 처리해
+          // 방향키 입력이 setInterval 틱과 겹치지 않도록 함
+          setTimeout(() => {
+            setGameState((s) => symbol ? fpBlock.key(symbol, s) : s);
+          });
+        }
       }
     });
     return () => removeKeyListener();
@@ -102,6 +117,20 @@ function App() {
         className="App"
         role="application"
       >
+        {showHelp ? (
+          <div className="help-overlay" role="dialog" aria-label="도움말">
+            <table>
+              <tbody>
+                {HELP_ITEMS.map(({ key, action }) => (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td>{action}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
         <Blocks blocks={fpBlock.join(gameState).flat()} />
       </div>
     </div>

@@ -12,6 +12,10 @@ describe('getKeySymbol - 키 매핑', () => {
     expect(getKeySymbol(40)).toBe('down');
   });
 
+  it('H키(72)는 help로 매핑된다', () => {
+    expect(getKeySymbol(72)).toBe('help');
+  });
+
   it('SAVE(83), LOAD(76)는 getKeySymbol 범위 밖이므로 null을 반환한다', () => {
     expect(getKeySymbol(83)).toBeNull();
     expect(getKeySymbol(76)).toBeNull();
