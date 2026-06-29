@@ -45,8 +45,8 @@ const HELP_ITEMS = [
 const Block = React.memo(({ color, children }) => (
   <div
     aria-hidden="true"
-    className={'block ' + (color === MISSILE_COLOR ? 'missile' : '')}
-    style={{ backgroundColor: color }}
+    className={['block', color !== 'grey' ? 'block--filled' : '', color === MISSILE_COLOR ? 'missile' : ''].filter(Boolean).join(' ')}
+    style={color !== 'grey' ? { '--c': color } : undefined}
   >
     {children}
   </div>

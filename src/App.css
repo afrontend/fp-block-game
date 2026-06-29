@@ -4,7 +4,12 @@
 
 .App {
   align-items: flex-start;
-  background: white;
+  background: #dde6ef;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 4px rgba(0,0,0,0.08),
+    0 8px 24px rgba(0,0,0,0.12);
   display: flex;
   flex-wrap: wrap;
   margin: auto;
@@ -15,6 +20,7 @@
 .help-overlay {
   align-items: center;
   background: rgba(0, 0, 0, 0.82);
+  border-radius: 8px;
   color: white;
   display: flex;
   inset: 0;
@@ -36,6 +42,9 @@
 }
 
 .App .block {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 2px;
   box-sizing: border-box;
   font-size: 3vh;
   font-weight: bold;
@@ -44,6 +53,19 @@
   text-align: center;
   touch-action: manipulation;
   width: 1vh;
+}
+
+.App .block.block--filled {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--c) 55%, white) 0%,
+    var(--c) 50%,
+    color-mix(in srgb, var(--c) 80%, black) 100%
+  );
+  border: 1px solid rgba(0,0,0,0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 3px rgba(0,0,0,0.25);
 }
 
 .missile {
@@ -56,15 +78,28 @@
   }
 }
 
-.logo {
-  animation: logo-spin infinite 20s linear;
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (prefers-color-scheme: dark) {
+  .App {
+    background: #161b22;
+    border-color: rgba(255,255,255,0.06);
+    box-shadow:
+      inset 0 1px 4px rgba(0,0,0,0.3),
+      0 8px 24px rgba(0,0,0,0.5);
   }
-  to {
-    transform: rotate(360deg);
+
+  .App .block {
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.04);
+  }
+
+  .App .block.block--filled {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.5),
+      0 2px 4px rgba(0,0,0,0.5);
   }
 }
