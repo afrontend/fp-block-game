@@ -66,6 +66,7 @@ function App() {
   const [showHelp, setShowHelp] = useState(false);
   const savedState = useRef(null);
   const showHelpRef = useRef(false);
+  const appRef = useRef(null);
 
   // UP 키는 연사 방지를 위해 쓰로틀 적용. useRef로 인스턴스를 한 번만 생성.
   const launchMissileRef = useRef(
@@ -110,6 +111,43 @@ function App() {
     return () => removeKeyListener();
   }, []);
 
+  useEffect(() => {
+    const el = appRef.current;
+    if (!el || !('ontouchstart' in window)) return;
+    const launchThrottled = throttle(
+      () => setGameState(s => fpBlock.key('up', s)),
+      GAME_CONFIG.MISSILE_THROTTLE_MS,
+    );
+    let startX = 0, startY = 0;
+    const onTouchStart = e => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      e.preventDefault();
+    };
+    const onTouchEnd = e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      const absDx = Math.abs(dx), absDy = Math.abs(dy);
+      if (absDx < 10 && absDy < 10) {
+        launchThrottled();
+      } else if (Math.max(absDx, absDy) > 30) {
+        if (absDx > absDy) {
+          const symbol = dx > 0 ? 'right' : 'left';
+          setTimeout(() => setGameState(s => fpBlock.key(symbol, s)));
+        } else if (dy < 0) {
+          launchThrottled();
+        }
+      }
+      e.preventDefault();
+    };
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: false });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, []);
+
   return (
     <div className="container">
       <div className="App-wrapper">
@@ -117,6 +155,7 @@ function App() {
           <img style={{ width: 20, height: 20 }} src="https://agvim.files.wordpress.com/2015/08/github-mark-32px.png?w=685" alt="GitHub" />
         </a>
         <div
+          ref={appRef}
           aria-label="Block game"
           className="App"
           role="application"
