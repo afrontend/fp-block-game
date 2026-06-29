@@ -112,14 +112,15 @@ function App() {
 
   return (
     <div className="container">
-      <div
-        aria-label="Block game"
-        className="App"
-        role="application"
-      >
+      <div className="App-wrapper">
         <a href="https://github.com/afrontend/fp-block-game" title="fp-block-game" style={{ position: 'absolute', top: 8, right: 8, zIndex: 100 }}>
           <img style={{ width: 20, height: 20 }} src="https://agvim.files.wordpress.com/2015/08/github-mark-32px.png?w=685" alt="GitHub" />
         </a>
+        <div
+          aria-label="Block game"
+          className="App"
+          role="application"
+        >
         {showHelp ? (
           <div className="help-overlay" role="dialog" aria-label="도움말">
             <table>
@@ -135,6 +136,7 @@ function App() {
           </div>
         ) : null}
         <Blocks blocks={fpBlock.join(gameState).flat()} />
+        </div>
       </div>
     </div>
   );

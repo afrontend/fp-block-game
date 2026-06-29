@@ -2,6 +2,12 @@
   position: relative;
 }
 
+.App-wrapper {
+  margin: auto;
+  position: relative;
+  width: calc(1vh * 30 + 2px);
+}
+
 .App {
   align-items: flex-start;
   background: #dde6ef;
@@ -12,9 +18,8 @@
     0 8px 24px rgba(0,0,0,0.12);
   display: flex;
   flex-wrap: wrap;
-  margin: auto;
   position: relative;
-  width: calc(1vh * 30 + 2px);
+  width: 100%;
 }
 
 .help-overlay {
@@ -54,6 +59,7 @@
   touch-action: manipulation;
   width: 1vh;
 }
+
 
 .App .block.block--filled {
   background: linear-gradient(
