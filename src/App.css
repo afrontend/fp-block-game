@@ -8,6 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: auto;
+  position: relative;
   width: calc(1vh * 30 + 2px);
 }
 
