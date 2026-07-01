@@ -29,3 +29,5 @@ yarn-error.log*
 .tern-project
 .tetris.vimprojects
 tsconfig.json
+screenshot.png
+game-screenshot.png

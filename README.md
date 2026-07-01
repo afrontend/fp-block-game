@@ -1,7 +1,7 @@
 # Block Game
 > 블럭을 미사일로 맞추는 자바스크립트 게임
 
-[![block game screenshot](./screenshot.png "block game screenshot")](https://afrontend.github.io/fp-block-game/)
+[![block game screenshot](https://github.com/afrontend/fp-block-game/releases/download/screenshots/screenshot.png "block game screenshot")](https://afrontend.github.io/fp-block-game/)
 
 [블로그](https://agvim.wordpress.com/2019/03/25/block-game-with-javascript/)에서 간단한 설명을 볼 수 있으며 아래 라이브러리를 사용했다.
 
