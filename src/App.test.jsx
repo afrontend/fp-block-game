@@ -1,7 +1,19 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import App, { GAME_CONFIG } from './App';
 import { getKeySymbol } from './utils/keyMap';
+
+function fireTouch(el, type, x, y) {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  event.touches = [{ clientX: x, clientY: y }];
+  event.changedTouches = [{ clientX: x, clientY: y }];
+  el.dispatchEvent(event);
+}
+
+function swipe(el, x1, y1, x2, y2) {
+  fireTouch(el, 'touchstart', x1, y1);
+  fireTouch(el, 'touchend', x2, y2);
+}
 
 vi.mock('fp-block', () => ({
   default: {
@@ -148,5 +160,85 @@ describe('App 컴포넌트', () => {
     unmount();
     vi.advanceTimersByTime(GAME_CONFIG.TICK_INTERVAL_MS * 5);
     expect(fpBlock.tick).not.toHaveBeenCalled();
+  });
+});
+
+// ─── 터치/스와이프 동작 ─────────────────────────────────────────────────────
+
+describe('터치/스와이프 동작', () => {
+  function mountApp() {
+    const { unmount } = render(<App />);
+    const el = document.querySelector('.App');
+    return { el, unmount };
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    window.ontouchstart = null;
+  });
+
+  afterEach(() => {
+    delete window.ontouchstart;
+    vi.useRealTimers();
+  });
+
+  it('제자리 탭(움직임 10px 미만)은 미사일 발사(up)로 처리된다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 0, 2, 2); });
+    expect(fpBlock.key).toHaveBeenCalledWith('up', expect.anything());
+  });
+
+  it('오른쪽으로 스와이프하면 right 이동이 호출된다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 0, 50, 0); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).toHaveBeenCalledWith('right', expect.anything());
+  });
+
+  it('왼쪽으로 스와이프하면 left 이동이 호출된다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 50, 0, 0, 0); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).toHaveBeenCalledWith('left', expect.anything());
+  });
+
+  it('위로 스와이프하면 미사일이 발사된다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 50, 0, 0); });
+    expect(fpBlock.key).toHaveBeenCalledWith('up', expect.anything());
+  });
+
+  it('아래로 스와이프해도 아무 동작도 일어나지 않는다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 0, 0, 50); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).not.toHaveBeenCalled();
+  });
+
+  it('10~30px 사이의 애매한 움직임은 무시된다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 0, 20, 0); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).not.toHaveBeenCalled();
+  });
+
+  it('터치를 지원하지 않는 환경에서는 스와이프가 동작하지 않는다', async () => {
+    const fpBlock = (await import('fp-block')).default;
+    delete window.ontouchstart;
+    const { el } = mountApp();
+    act(() => { swipe(el, 0, 0, 100, 0); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).not.toHaveBeenCalled();
+  });
+
+  it('언마운트 시 터치 리스너가 정리된다', () => {
+    const { el, unmount } = mountApp();
+    const removeSpy = vi.spyOn(el, 'removeEventListener');
+    unmount();
+    expect(removeSpy).toHaveBeenCalledWith('touchstart', expect.any(Function));
+    expect(removeSpy).toHaveBeenCalledWith('touchend', expect.any(Function));
+    removeSpy.mockRestore();
   });
 });
