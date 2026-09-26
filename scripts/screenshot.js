@@ -7,7 +7,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 5175;
 const BASE = '/fp-block-game/';
 
-// fpBlock.init(GRID_WIDTH=40, GRID_HEIGHT=30) → init(rows=40, cols=30)
+// fpBlock.init({ rows: 40, columns: 30 })
 const COLS = 30;
 const ROWS = 40;
 const TICK_INTERVAL_MS = 150;
@@ -117,7 +117,7 @@ async function main() {
   const page = await browser.newPage();
   await page.setViewportSize({ width: 480, height: 760 });
   await page.goto(url);
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(3200);
 
   console.log(`Running AI for ${TICKS} ticks (~${(TICKS * TICK_INTERVAL_MS / 1000).toFixed(1)}s)...`);
   for (let i = 0; i < TICKS; i++) {

@@ -10,6 +10,23 @@
 * [keyboard-handler](https://github.com/emiljohansson/keyboard-handler)
 * [react](https://react.dev/)
 
+# 조작
+
+| 입력 | 동작 |
+|------|------|
+| `←` `→` / 좌우 스와이프 | 좌우 이동 |
+| `↑` / 위로 스와이프 | 미사일 발사 |
+| `Space` / 화면 탭 | 일시정지 / 재개 |
+| `S` / `L` | 빠른 저장 / 빠른 불러오기 |
+| `D` | 디버그 모드 전환 |
+| `H` | 도움말 열기 / 닫기 |
+
+게임은 3초 카운트다운 후 시작한다. 빠른 저장 상태는 페이지를 새로 고치면 사라진다.
+
+# Debug Mode
+
+`D`를 누르면 배경·우주선·미사일·운석·합성 패널을 각각 확인할 수 있다.
+
 # Installation
 
     git clone https://github.com/afrontend/fp-block-game

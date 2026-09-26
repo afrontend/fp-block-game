@@ -116,7 +116,7 @@ async function main() {
   const page = await context.newPage();
   await page.setViewportSize({ width: WIDTH, height: HEIGHT });
   await page.goto(url);
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(3200);
 
   console.log(`Running AI for ${TICKS} ticks (~${(TICKS * TICK_INTERVAL_MS / 1000).toFixed(1)}s)...`);
   for (let i = 0; i < TICKS; i++) {

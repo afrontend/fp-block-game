@@ -17,10 +17,14 @@ function swipe(el, x1, y1, x2, y2) {
 
 vi.mock('fp-block', () => ({
   default: {
-    init: vi.fn(() => ({ blocks: [], score: 0 })),
+    init: vi.fn(() => ({ paused: false })),
     tick: vi.fn((state) => state),
     key: vi.fn((symbol, state) => ({ ...state, lastKey: symbol })),
-    join: vi.fn(() => [[{ color: 'red', count: 1 }]]),
+    join: vi.fn(() => [[{ color: 'red' }]]),
+    toArray: vi.fn(() => [[], [], [], []]),
+    getTickInterval: vi.fn(() => 150),
+    serializeState: vi.fn(state => ({ game: 'fp-block', version: 1, state })),
+    restoreState: vi.fn(snapshot => snapshot.state),
   },
 }));
 
@@ -47,31 +51,27 @@ describe('getKeySymbol', () => {
     expect(getKeySymbol(39)).toBe('right');
   });
 
-  it('DOWN(40) → "down"', () => {
-    expect(getKeySymbol(40)).toBe('down');
+  it('DOWN(40)은 매핑되지 않는다', () => {
+    expect(getKeySymbol(40)).toBeNull();
   });
 
   it('매핑되지 않은 키(예: 65 = A) → null', () => {
     expect(getKeySymbol(65)).toBeNull();
   });
 
-  it('SAVE(83), LOAD(76)는 keyList에 없으므로 null 반환', () => {
-    expect(getKeySymbol(83)).toBeNull();
-    expect(getKeySymbol(76)).toBeNull();
+  it('SAVE(83), LOAD(76)는 시스템 기능으로 매핑된다', () => {
+    expect(getKeySymbol(83)).toBe('save');
+    expect(getKeySymbol(76)).toBe('load');
   });
 });
 
 // ─── GAME_CONFIG ───────────────────────────────────────────────────────────
 
 describe('GAME_CONFIG', () => {
-  it('GRID_WIDTH와 GRID_HEIGHT가 정의되어 있어야 함', () => {
-    expect(GAME_CONFIG.GRID_WIDTH).toBe(40);
-    expect(GAME_CONFIG.GRID_HEIGHT).toBe(30);
-  });
-
-  it('TICK_INTERVAL_MS와 MISSILE_THROTTLE_MS가 정의되어 있어야 함', () => {
-    expect(GAME_CONFIG.TICK_INTERVAL_MS).toBe(150);
-    expect(GAME_CONFIG.MISSILE_THROTTLE_MS).toBe(500);
+  it('행, 열, 미사일 대기 tick이 정의되어 있어야 함', () => {
+    expect(GAME_CONFIG.GRID_ROWS).toBe(40);
+    expect(GAME_CONFIG.GRID_COLUMNS).toBe(30);
+    expect(GAME_CONFIG.MISSILE_COOLDOWN_TICKS).toBe(3);
   });
 });
 
@@ -138,19 +138,22 @@ describe('App 컴포넌트', () => {
     vi.useRealTimers();
   });
 
-  it('마운트 시 fpBlock.init이 GRID_WIDTH, GRID_HEIGHT로 호출됨', async () => {
+  it('마운트 시 fpBlock.init이 객체 설정으로 호출됨', async () => {
     const fpBlock = (await import('fp-block')).default;
     render(<App />);
-    expect(fpBlock.init).toHaveBeenCalledWith(
-      GAME_CONFIG.GRID_WIDTH,
-      GAME_CONFIG.GRID_HEIGHT,
-    );
+    expect(fpBlock.init).toHaveBeenCalledWith({
+      rows: GAME_CONFIG.GRID_ROWS,
+      columns: GAME_CONFIG.GRID_COLUMNS,
+      missileCooldownTicks: GAME_CONFIG.MISSILE_COOLDOWN_TICKS,
+    });
   });
 
-  it('TICK_INTERVAL_MS마다 fpBlock.tick이 호출됨', async () => {
+  it('카운트다운 후 라이브러리 tick 주기마다 fpBlock.tick이 호출됨', async () => {
     const fpBlock = (await import('fp-block')).default;
     render(<App />);
-    vi.advanceTimersByTime(GAME_CONFIG.TICK_INTERVAL_MS * 3);
+    act(() => { vi.advanceTimersByTime(3000); });
+    fpBlock.tick.mockClear();
+    act(() => { vi.advanceTimersByTime(450); });
     expect(fpBlock.tick).toHaveBeenCalledTimes(3);
   });
 
@@ -158,7 +161,7 @@ describe('App 컴포넌트', () => {
     const fpBlock = (await import('fp-block')).default;
     const { unmount } = render(<App />);
     unmount();
-    vi.advanceTimersByTime(GAME_CONFIG.TICK_INTERVAL_MS * 5);
+    vi.advanceTimersByTime(5000);
     expect(fpBlock.tick).not.toHaveBeenCalled();
   });
 });
@@ -168,6 +171,7 @@ describe('App 컴포넌트', () => {
 describe('터치/스와이프 동작', () => {
   function mountApp() {
     const { unmount } = render(<App />);
+    act(() => { vi.advanceTimersByTime(3000); });
     const el = document.querySelector('.App');
     return { el, unmount };
   }
@@ -183,11 +187,11 @@ describe('터치/스와이프 동작', () => {
     vi.useRealTimers();
   });
 
-  it('제자리 탭(움직임 10px 미만)은 미사일 발사(up)로 처리된다', async () => {
+  it('제자리 탭(움직임 10px 미만)은 일시정지(space)로 처리된다', async () => {
     const fpBlock = (await import('fp-block')).default;
     const { el } = mountApp();
-    act(() => { swipe(el, 0, 0, 2, 2); });
-    expect(fpBlock.key).toHaveBeenCalledWith('up', expect.anything());
+    act(() => { swipe(el, 0, 0, 2, 2); vi.advanceTimersByTime(0); });
+    expect(fpBlock.key).toHaveBeenCalledWith('space', expect.anything());
   });
 
   it('오른쪽으로 스와이프하면 right 이동이 호출된다', async () => {
@@ -207,7 +211,7 @@ describe('터치/스와이프 동작', () => {
   it('위로 스와이프하면 미사일이 발사된다', async () => {
     const fpBlock = (await import('fp-block')).default;
     const { el } = mountApp();
-    act(() => { swipe(el, 0, 50, 0, 0); });
+    act(() => { swipe(el, 0, 50, 0, 0); vi.advanceTimersByTime(0); });
     expect(fpBlock.key).toHaveBeenCalledWith('up', expect.anything());
   });
 
