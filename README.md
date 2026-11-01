@@ -62,4 +62,4 @@
 https://afrontend.github.io/fp-block-game/
 
 # License
-MIT © [Bob Hwang](https://afrontend.github.io)
+MIT © [afrontend](https://afrontend.github.io)
